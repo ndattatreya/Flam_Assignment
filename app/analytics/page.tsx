@@ -18,10 +18,23 @@ import {
 } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
+// Define types for your data
+type getDepartmentStats = {
+  department: string;
+  count: number;
+  // add other fields if needed
+};
+
+type generateBookmarkTrends = {
+  month: string; // or number, or Date, whatever your data uses
+  count: number;
+  // add other fields if needed
+};
+
 export default function AnalyticsPage() {
   const { users, isLoading } = useUserData();
-  const [departmentStats, setDepartmentStats] = useState([]);
-  const [bookmarkTrends, setBookmarkTrends] = useState([]);
+  const [departmentStats, setDepartmentStats] = useState<getDepartmentStats[]>([]);
+  const [bookmarkTrends, setBookmarkTrends] = useState<generateBookmarkTrends[]>([]);
   
   useEffect(() => {
     if (!isLoading && users.length > 0) {
