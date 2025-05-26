@@ -22,7 +22,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useUserData } from '@/hooks/useUserData';
-import { Department, FilterOptions, SortOption, SortDirection } from '@/types';
+import { Department, FilterOptions } from '@/types';
 
 export function SearchAndFilter() {
   const { 
@@ -97,7 +97,7 @@ export function SearchAndFilter() {
   };
 
   const handleSortChange = (value: string) => {
-    const [sortOption, direction] = value.split('-') as [SortOption, SortDirection];
+    const [sortOption, direction] = value.split('-') as [typeof sortBy, typeof sortDirection];
     setSortBy(sortOption);
     setSortDirection(direction);
   };
