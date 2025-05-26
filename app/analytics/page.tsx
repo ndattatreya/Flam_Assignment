@@ -2,76 +2,55 @@
 
 import { useState, useEffect } from 'react';
 import { useUserData } from '@/hooks/useUserData';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { DepartmentPerformanceChart } from '@/components/analytics/DepartmentPerformanceChart';
 import { BookmarkTrendsChart } from '@/components/analytics/BookmarkTrendsChart';
 import { DepartmentDistributionChart } from '@/components/analytics/DepartmentDistributionChart';
-import { 
-  Users, 
-  Award, 
-  Bookmark, 
-  TrendingUp 
-} from 'lucide-react';
-import { 
-  getDepartmentStats, 
-  generateBookmarkTrends 
-} from '@/lib/utils';
+import { Users, Award, Bookmark, TrendingUp } from 'lucide-react';
+import { getDepartmentStats, generateBookmarkTrends } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Define types for your data
-type getDepartmentStats = {
-  department: string;
-  count: number;
-  // add other fields if needed
-};
-
-type generateBookmarkTrends = {
-  month: string; // or number, or Date, whatever your data uses
-  count: number;
-  // add other fields if needed
-};
+import { Department, DepartmentStats, BookmarkTrend } from '@/types';
 
 export default function AnalyticsPage() {
   const { users, isLoading } = useUserData();
-  const [departmentStats, setDepartmentStats] = useState<getDepartmentStats[]>([]);
-  const [bookmarkTrends, setBookmarkTrends] = useState<generateBookmarkTrends[]>([]);
-  
+  const [departmentStats, setDepartmentStats] = useState<DepartmentStats[]>([]);
+  const [bookmarkTrends, setBookmarkTrends] = useState<BookmarkTrend[]>([]);
+
   useEffect(() => {
     if (!isLoading && users.length > 0) {
-      setDepartmentStats(getDepartmentStats(users));
+      setDepartmentStats(getDepartmentStats(users) as DepartmentStats[]);
       setBookmarkTrends(generateBookmarkTrends());
     }
   }, [users, isLoading]);
-  
-  // Calculate analytics data
+
   const totalEmployees = users.length;
   const averagePerformance = users.length > 0 
     ? (users.reduce((sum, user) => sum + user.performance, 0) / users.length).toFixed(1)
     : 0;
   const topPerformers = users.filter(user => user.performance >= 4).length;
-  
+
   if (isLoading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-4 w-96" />
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Skeleton className="h-80 w-full" />
           <Skeleton className="h-80 w-full" />
         </div>
-        
+
         <Skeleton className="h-80 w-full" />
       </div>
     );
   }
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -80,8 +59,7 @@ export default function AnalyticsPage() {
           Track employee performance metrics and department statistics
         </p>
       </div>
-      
-      {/* Summary Cards */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
@@ -96,7 +74,7 @@ export default function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-between items-start">
@@ -110,7 +88,7 @@ export default function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-between items-start">
@@ -124,13 +102,15 @@ export default function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Bookmarks</p>
-                <p className="text-3xl font-bold mt-1">{bookmarkTrends.reduce((sum, item) => sum + item.count, 0)}</p>
+                <p className="text-3xl font-bold mt-1">
+                  {bookmarkTrends.reduce((sum, item) => sum + item.count, 0)}
+                </p>
               </div>
               <div className="bg-chart-3/10 p-2 rounded-full">
                 <Bookmark className="h-5 w-5 text-chart-3" />
@@ -139,13 +119,12 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
-      
-      {/* Charts */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DepartmentPerformanceChart data={departmentStats} />
         <BookmarkTrendsChart data={bookmarkTrends} />
       </div>
-      
+
       <DepartmentDistributionChart data={departmentStats} />
     </div>
   );

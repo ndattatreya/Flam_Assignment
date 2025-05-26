@@ -205,8 +205,9 @@ export function getDepartmentStats(users: User[]): DepartmentStats[] {
   const departmentMap = new Map<Department, { totalRating: number; count: number }>();
   
   users.forEach(user => {
-    const current = departmentMap.get(user.department) || { totalRating: 0, count: 0 };
-    departmentMap.set(user.department, {
+    const department = user.department as Department;
+    const current = departmentMap.get(department) || { totalRating: 0, count: 0 };
+    departmentMap.set(department, {
       totalRating: current.totalRating + user.performance,
       count: current.count + 1
     });
@@ -260,31 +261,28 @@ export function getRatingLabel(rating: number): string {
   }
 }
 
+export interface FilterOptions {
+  department?: Department;
+  rating?: number;
+}
+
 export function filterUsers(
   users: User[],
   searchTerm: string,
   filters: FilterOptions
 ): User[] {
   return users.filter(user => {
-    // Search filter
-    const searchLower = searchTerm.toLowerCase();
-    const nameMatch = `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchLower);
-    const emailMatch = user.email.toLowerCase().includes(searchLower);
-    const departmentMatch = user.department.toLowerCase().includes(searchLower);
-    
-    const searchMatches = !searchTerm || nameMatch || emailMatch || departmentMatch;
-    
-    // Department filter
-    const departmentFilterMatches = filters.departments.length === 0 || 
-      filters.departments.includes(user.department as Department);
-    
-    // Rating filter
-    const ratingFilterMatches = filters.ratings.length === 0 || 
-      filters.ratings.includes(user.performance);
-    
-    return searchMatches && departmentFilterMatches && ratingFilterMatches;
+    const matchesSearch = `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDepartment = filters.department ? user.department === filters.department : true;
+    const matchesRating = filters.rating ? user.performance === filters.rating : true;
+
+    return matchesSearch && matchesDepartment && matchesRating;
   });
 }
+
+export type SortDirection = 'asc' | 'desc';
+
+export type SortOption = 'name' | 'performance' | 'department';
 
 export function sortUsers(
   users: User[],
