@@ -32,7 +32,11 @@ export default function EmployeesPage() {
         </p>
       </div>
 
-      <SearchAndFilter />
+      <SearchAndFilter
+        departmentsList={['Engineering', 'Marketing', 'HR']}
+        ratingsList={[1, 2, 3, 4, 5]}
+        onFilterChange={() => { }}
+      />
 
       {isLoading ? (
         <div className="space-y-4">
@@ -57,7 +61,7 @@ export default function EmployeesPage() {
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => {
                   const bookmarked = isBookmarked(user.id);
-                  
+
                   return (
                     <TableRow key={user.id}>
                       <TableCell>
@@ -79,15 +83,15 @@ export default function EmployeesPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button 
-                            variant={bookmarked ? "default" : "outline"} 
-                            size="icon" 
+                          <Button
+                            variant={bookmarked ? "default" : "outline"}
+                            size="icon"
                             onClick={() => toggleBookmark(user)}
                           >
                             <BookmarkIcon className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="icon"
                             onClick={() => promoteUser(user.id)}
                             disabled={user.performance >= 5}
