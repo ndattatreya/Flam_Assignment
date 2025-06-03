@@ -11,26 +11,26 @@ import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const { filteredUsers, isLoading } = useUserData();
-  
+
   // Pagination
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  
+
   const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  
+
   // Reset to first page when filtered results change
   useEffect(() => {
     setCurrentPage(1);
   }, [filteredUsers.length]);
-  
+
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
-  
+
   const handleNextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
@@ -44,7 +44,12 @@ export default function Home() {
         </p>
       </div>
 
-      <SearchAndFilter />
+      <SearchAndFilter
+        departmentsList={['Engineering', 'Marketing', 'HR']} 
+        ratingsList={[1, 2, 3, 4, 5]} 
+        onFilterChange={() => { }} 
+      />
+
 
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -77,7 +82,7 @@ export default function Home() {
               </div>
             )}
           </div>
-          
+
           {/* Pagination */}
           {filteredUsers.length > itemsPerPage && (
             <div className="flex items-center justify-between border-t pt-4">

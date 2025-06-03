@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { User, FilterOptions, SortOption, SortDirection } from '@/types';
+import type { User, SortOption, SortDirection } from '@/types';
+import type { FilterOptions } from '@/lib/utils';
 import { enhanceUserData, filterUsers, sortUsers } from '@/lib/utils';
 
 interface UserDataContextType {
@@ -29,7 +30,7 @@ export const UserDataProvider = ({ children }: { children: React.ReactNode }) =>
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState<FilterOptions>({ departments: [], ratings: [] });
+  const [filters, setFilters] = useState<FilterOptions>({}); // Replace with correct default values based on FilterOptions definition
   const [sortBy, setSortBy] = useState<SortOption>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
