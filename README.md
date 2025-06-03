@@ -50,8 +50,9 @@ A modern HR dashboard web application built with **Next.js**, **TypeScript**, an
 1. **Clone the repository**
 
    ```
-   git clone https://github.com/ndattatreya/Flam_Assignment.git
-````
+    git clone https://github.com/ndattatreya/Flam_Assignment.git
+   cd <repo_name>
+   ```
 
 2. **Install dependencies**
 
