@@ -3,11 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-<<<<<<< HEAD
-=======
-import { useUserData } from '@/hooks/useUserData';
-import { Department, FilterOptions } from '@/types';
->>>>>>> 02efed9910feaf2e22acad2417c47f315843073d
 
 interface FilterState {
   departments: string[];
@@ -66,29 +61,9 @@ export const SearchAndFilter: React.FC<Props> = ({
     onFilterChange(updatedFilters);
   };
 
-<<<<<<< HEAD
   const activeFilterCount =
   ((localFilters.departments?.length ?? 0) > 0 ? 1 : 0) +
   ((localFilters.ratings?.length ?? 0) > 0 ? 1 : 0);
-=======
-  const clearAllFilters = () => {
-    const emptyFilters = { departments: [], ratings: [] };
-    setLocalFilters(emptyFilters);
-    setFilters(emptyFilters);
-    setLocalSearchTerm('');
-    setSearchTerm('');
-  };
-
-  const handleSortChange = (value: string) => {
-    const [sortOption, direction] = value.split('-') as [typeof sortBy, typeof sortDirection];
-    setSortBy(sortOption);
-    setSortDirection(direction);
-  };
-
-  const activeFilterCount = 
-    (filters.departments.length > 0 ? 1 : 0) + 
-    (filters.ratings.length > 0 ? 1 : 0);
->>>>>>> 02efed9910feaf2e22acad2417c47f315843073d
 
   return (
     <div className="space-y-4 p-4 border rounded-lg">
